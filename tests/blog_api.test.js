@@ -9,10 +9,7 @@ const Blog = require('../models/blogs')
 //initialize the database before every test
 beforeEach(async () => {
   await Blog.deleteMany({})
-  const blogObjects = helper.initialBlogs
-    .map(blog => new Blog(blog))
-  const promiseArray = blogObjects.map(blog => blog.save())
-  await Promise.all(promiseArray)
+  await Blog.insertMany(helper.initialBlogs)
 })
 
 test('blogs are returned as json', async () => {
@@ -83,6 +80,26 @@ test('if the title and url properties are missing from the request data, the bac
     .post('/api/blogs')
     .send(newBlog)
     .expect(400)
+})
+
+describe('deletion of a blog', () => {
+  test('succeeds with status code 204 if id is valid', async () => {
+    const blogAtStart = await api.get('/api/blogs')
+    const blogToDelete = blogAtStart.body[0]
+
+    await api
+      .delete(`/api/blogs/${blogToDelete.id}`)
+      .expect(204)
+
+    const blogsAtEnd = await api.get('/api/blogs')
+    expect(blogsAtEnd.body).toHaveLength(
+      helper.initialBlogs.length - 1
+    )
+
+    const ids = blogsAtEnd.body.map(r => r.id)
+
+    expect(ids).not.toContain(blogToDelete.id)
+  })
 })
 
 afterAll(() => {

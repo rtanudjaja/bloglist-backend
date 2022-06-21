@@ -9,13 +9,18 @@ blogsRouter.get('/', async (request, response) => {
 blogsRouter.post('/', async (request, response) => {
   const blog = new Blog(request.body)
   if(!blog.title && !blog.url) {
-    response.send(400)
+    return response.send(400)
   }
   if(!blog.likes) {
     blog.likes = 0
   }
   const result = await blog.save()
   response.status(201).json(result)
+})
+
+blogsRouter.delete('/:id', async (request, response) => {
+  await Blog.findByIdAndRemove(request.params.id)
+  response.status(204).end()
 })
 
 module.exports = blogsRouter
