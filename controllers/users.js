@@ -8,8 +8,14 @@ usersRouter.get('/', async (request, response) => {
   response.json(users)
 })
 
-usersRouter.post('/', async (request, response) => {
+usersRouter.post('/', async (request, response, next) => {
   const { username, name, password } = request.body
+
+  if (password.length < 3) {
+    return response.status(400).json({
+      error: 'password must be at least 3 characters long'
+    })
+  }
 
   const existingUser = await User.findOne({ username })
   if (existingUser) {
@@ -27,9 +33,12 @@ usersRouter.post('/', async (request, response) => {
     passwordHash,
   })
 
-  const savedUser = await user.save()
-
-  response.status(201).json(savedUser)
+  try {
+    const savedUser = await user.save()
+    response.status(201).json(savedUser)
+  } catch(exception) {
+    next(exception)
+  }
 })
 
 module.exports = usersRouter

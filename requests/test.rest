@@ -15,7 +15,7 @@ Content-Type: application/json
 Authorization: 
 
 {
-    "username": "mluukkai",
-    "name": "Matti Luukkainen",
-    "password": "123456"
+    "username": "ml",
+    "name": "Matti",
+    "password": "123"
 }
