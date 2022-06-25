@@ -142,6 +142,19 @@ test("if the title and url properties are missing from the request data, the bac
     .expect(400);
 });
 
+test("adding a blog fails with the proper status code 401 Unauthorized if a token is not provided", async () => {
+  const newBlog = {
+    title: "Canonical string reduction",
+    author: "Edsger W. Dijkstra",
+    url: "https://www.cs.utexas.edu/users/EWD/transcriptions/EWD08xx/EWD808.html",
+  };
+
+  await api
+    .post("/api/blogs")
+    .send(newBlog)
+    .expect(401);
+});
+
 describe("deletion of a blog", () => {
   test("succeeds with status code 204 if id is valid", async () => {
     const user = await User.findOne({});
