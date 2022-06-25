@@ -96,7 +96,7 @@ const initialBlogs = [
   }
 ]
 
-const User = require('../models/users')
+const User = require('../models/user')
 
 const usersInDb = async () => {
   const users = await User.find({})

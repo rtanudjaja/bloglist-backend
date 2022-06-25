@@ -50,6 +50,7 @@ test('making an HTTP POST request to the /api/blogs url successfully creates a n
     return blog
   })
   expect(blogsArr).toHaveLength(helper.initialBlogs.length + 1)
+  blogsArr.forEach((blog) => delete blog.user)
   expect(blogsArr).toContainEqual(newBlog)
 })
 

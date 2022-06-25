@@ -4,9 +4,9 @@ Content-Type: application/json
 Authorization: 
 
 {
-    "username": "hellas",
-    "name": "Arto Hellas",
-    "password": "123456"
+  "username": "hellas",
+  "name": "Arto Hellas",
+  "password": "123456"
 }
 
 ###
@@ -15,7 +15,23 @@ Content-Type: application/json
 Authorization: 
 
 {
-    "username": "ml",
-    "name": "Matti",
-    "password": "123"
+  "username": "ml",
+  "name": "Matti",
+  "password": "123"
 }
+
+###
+POST http://localhost:3003/api/blogs/
+Content-Type: application/json
+Authorization: 
+
+{
+  "title": "Go To Statement Considered Harmful",
+  "author": "Edsger W. Dijkstra",
+  "url": "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
+  "likes": 5
+}
+
+# ###
+# DELETE http://localhost:3003/api/blogs/62b6825b76c9ef9d166ab6a0
+# Content-Type: application/json
