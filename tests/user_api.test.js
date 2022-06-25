@@ -12,7 +12,17 @@ const helper = require('../utils/test_helper')
 describe('when there is initially one user at db', () => {
   beforeEach(async () => {
     await User.deleteMany({})
-    await User.insertMany(helper.initialUsers)
+    await User.insertMany(
+      await Promise.all(helper.initialUsers.map(async (user) => {
+        const saltRounds = 10
+        const passwordHash = await bcrypt.hash(user.password, saltRounds)
+        return {
+          username: user.username,
+          name: user.name,
+          passwordHash,
+        }
+      }))
+    )
   })
 
   test('creation succeeds with a fresh username', async () => {
