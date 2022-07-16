@@ -1,7 +1,6 @@
 const jwt = require('jsonwebtoken')
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blogs')
-const User = require('../models/user')
 
 blogsRouter.get('/', async (request, response) => {
   const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 })
@@ -14,9 +13,9 @@ blogsRouter.post('/', async (request, response, next) => {
     if (!decodedToken.id) {
       return response.status(401).json({ error: 'token missing or invalid' })
     }
-    
+
     const user = request.user
-    
+
     const blog = new Blog({
       title: request.body.title,
       author: request.body.author,
@@ -66,6 +65,7 @@ blogsRouter.delete('/:id', async (request, response, next) => {
 blogsRouter.put('/:id', async (request, response, next) => {
   const body = request.body
   const blog = {
+    user: body.user,
     title: body.title,
     author: body.author,
     url: body.url,
